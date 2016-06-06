@@ -54,7 +54,7 @@
 											 snake[0].style.left=snakeRandNumLeft+"px";
 										     food.style.top=foodRandNumTop+"px";
 											 food.style.left=foodRandNumLeft+"px";
-											 console.log(snake[0].style.top);
+											 console.log("食物位置"+food.style.top+food.style.left);
 								 }
 								 function rand(){//产生初始化随机数函数
 											 snakeRandNumTop=Math.floor(Math.random()*24)*25;//获取1-25的随机数
@@ -81,42 +81,40 @@
 									 }
 								 }
 								 function topMove(){
+									 /*去处其他定时器*/
 													 window.clearInterval(timeTop);
 													 window.clearInterval(timeRight);
 													 window.clearInterval(timeBottom);
 													 window.clearInterval(timeLeft);
-											 if(parseInt(snake[0].style.top)<25){//若头部
+													 /*若头部的top属性小于25，则出界，提示游戏结束*/
+											 if(parseInt(snake[0].style.top)<25){
 												 window.clearInterval(timeTop);//清除向上时钟
 												 alert("游戏结束,确定后按任意键继续!");
-												 
 											 }
+											 /*若头部的位置与食物的位置相等*/
 											 else if(snake[0].style.left==food.style.left&&snake[0].style.top==food.style.top){
-												 time++;//时间增加2
-												 score++;//分数增加2
+												 time++;//时间增加
+												 score++;//分数增加
 												 show.innerHTML+="<div class='snake'></div>";//添加身体div标签
 												 snake=document.getElementsByClassName("snake");//重新获取所有蛇div对象								 
-												 for(var j=1;j<score;j++){
-														 snake[j].style.top=snake[j-1].style.top;
-														 snake[j].style.left=snake[j-1].style.left;
-												 }
+														 snake[score-1].style.top=snake[0].style.top;
+														 snake[score-1].style.left=snake[0].style.left;
 												 snake[0].style.top=parseInt(snake[0].style.top)-25+"px";
-												 snake[0].style.lefy=parseInt(snake[0].style.left)+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)+"px";
 												 timeTop=window.setInterval(topMove, 1000);//向上时钟
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
 											 else{		
 												 time++;
 												 if(score>1){
-													 for(var j=1;j<score;j++){								     
-															 snake[j].style.top=snake[j-1].style.top;
-															 snake[j].style.left=snake[j-1].style.left;
-													 }
-
+														 snake[score-1].style.top=snake[0].style.top;
+														 snake[score-1].style.left=snake[0].style.left;
 												 }
 												 snake[0].style.top=parseInt(snake[0].style.top)-25+"px";
-												 snake[0].style.lefy=parseInt(snake[0].style.left)+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)+"px";
 												 timeTop=window.setInterval(topMove, 1000);//向上时钟
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
-											 
 								 }
 								 function rightMove(){
 													 window.clearInterval(timeTop);
@@ -124,29 +122,33 @@
 													 window.clearInterval(timeBottom);
 													 window.clearInterval(timeLeft);
 											 //若到达边界提示游戏结束
-											  if(snake[0].style.left>600){
-												 alert("游戏结束,确定后按任意键继续!");
+											  if(parseInt(snake[0].style.left)>600){
 												 window.clearInterval(timeRight);//清除向上时钟
+												 alert("游戏结束,确定后按任意键继续!");
 											 }
 											 //若吃到食物
-											 if(snake[score-1].style.left==foodRandNumLeft&&snake[score-1].style.top==foodRandNumTop){
+											 else if(snake[0].style.left==food.style.left&&snake[0].style.top==food.style.top){
 												 time++;//加分次数
 												 score++;
 												 show.innerHTML+="<div class='snake'></div>";
 												 snake=document.getElementsByClassName("snake");//重新获取蛇div对象
-												 for(var j=0;j<score;j++){
-													 snake[j].style.left+=(time-j)*25+"px";
-													 snake[j].style.top+="px";
-												 }
+														 snake[score-1].style.top=snake[0].style.top;
+														 snake[score-1].style.left=snake[0].style.left;
+												 snake[0].style.top=parseInt(snake[0].style.top)+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)+25+"px";
 												 timeRight=window.setInterval(rightMove, 1000);//向右时钟
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
 											 else{
 												 time++;
-													 for(var j=0;j<score;j++){
-														 snake[j].style.left+=(time-j)*25+"px";
-														 snake[j].style.top+="px";
-													 }
+												 if(score>1){
+														 snake[score-1].style.top=snake[0].style.top;
+														 snake[score-1].style.left=snake[0].style.left;
+												 }
+												 snake[0].style.top=parseInt(snake[0].style.top)+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)+25+"px";
 												 timeRight=window.setInterval(rightMove, 1000);//向右时钟
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
 								 }
 								 function bottomMove(){
@@ -154,28 +156,32 @@
 													 window.clearInterval(timeRight);
 													 window.clearInterval(timeBottom);
 													 window.clearInterval(timeLeft);
-											  if(snake[0].style.top>600){
-												 alert("游戏结束,确定后按任意键继续!");
+											  if(parseInt(snake[0].style.top)>600){
 												 window.clearInterval(timeBottom);//清除向上时钟
+												 alert("游戏结束,确定后按任意键继续!");
 											 }
-											 if(snake[score-1].style.left==foodRandNumLeft&&snake[score-1].style.top==foodRandNumTop){
+											 else if(snake[0].style.left==food.style.left&&snake[0].style.top==food.style.top){
 												 time++;//加分次数
 												 score++;
 												 show.innerHTML+="<div class='snake'></div>";
 												 snake=document.getElementsByClassName("snake");//重新获取蛇div对象
-												 for(var j=0;j<score;j++){
-													 snake[j].style.top+=(time-j)*25+"px";
-													 snake[j].style.left+="px";
-												 }
+														 snake[score-1].style.top=snake[0].style.top;
+														 snake[score-1].style.left=snake[0].style.left;
+												 snake[0].style.top=parseInt(snake[0].style.top)+25+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)+"px";
 												 timeBottom=window.setInterval(bottomMove, 1000);//向下移动
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
 											 else{
 												 time++;
-												 for(var j=0;j<score;j++){
-														 snake[j].style.top+=(time-j)*25+"px";
-														 snake[j].style.left+="px";
+												 if(score>1){
+														 snake[score-1].style.top=snake[0].style.top;
+														 snake[score-1].style.left=snake[0].style.left;
 												 }
+												 snake[0].style.top=parseInt(snake[0].style.top)+25+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)+"px";
 												 timeBottom=window.setInterval(bottomMove, 1000);//向下移动
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
 								 }
 								 function leftMove(){
@@ -183,30 +189,35 @@
 													 window.clearInterval(timeRight);
 													 window.clearInterval(timeBottom);
 													 window.clearInterval(timeLeft);
-											  if(snakeRandNumLeft-25<0){
-												 alert("游戏结束,确定后按任意键继续!");
+											  if(parseInt(snake[0].style.left)<25){
 												 window.clearInterval(timeLeft);//清除向上时钟
+												 alert("游戏结束,确定后按任意键继续!");
 											 }
-											 if(snake[score-1].style.left==foodRandNumLeft&&snake[score-1].style.top==foodRandNumTop){
+											else if(snake[0].style.left==food.style.left&&snake[0].style.top==food.style.top){
 												 time++;//加分次数
 												 score++;
 												 show.innerHTML+="<div class='snake'></div>";
 												 snake=document.getElementsByClassName("snake");//重新获取蛇div对象
-													 for(var j=0;j<score;j++){
-														 snake[j].style.left-=(time-j)*25+"px";
-														 snake[j].style.top+="px";
-													 }
-												 timeLeft=window.setInterval(leftMove, 1000);//向左移动
+												 snake[score-1].style.top=snake[0].style.top;
+												 snake[score-1].style.left=snake[0].style.left;
+												 snake[0].style.top=parseInt(snake[0].style.top)+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)-25+"px";
+												 timeLeft=window.setInterval(leftMove, 1000);//
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
 											 else{
 												 time++;
-													 for (var j=0;j<score;j++ ){
-														 snake[j].style.left-=(time-j)*25+"px";
-														 snake[j].style.top+="px";
-													 }
+												 if(score>1){
+														 snake[score-1].style.top=snake[0].style.top;
+														 snake[score-1].style.left=snake[0].style.left;
+												 }
+												 snake[0].style.top=parseInt(snake[0].style.top)+"px";
+												 snake[0].style.left=parseInt(snake[0].style.left)-25+"px";
 												 timeLeft=window.setInterval(leftMove, 1000);//向左移动
+												 console.log(snake[0].style.top+snake[0].style.left);
 											 }
-								 }	 
+								 }
+								 
 			 </script>
  </head>
  <body onload="ready()">
